@@ -7,6 +7,8 @@ import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactor
 import org.springframework.boot.web.server.WebServer;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -22,10 +24,15 @@ import java.io.IOException;
 public class HellobootApplication {
 
     public static void main(String[] args) {
-        ServletWebServerFactory serverFactory = new TomcatServletWebServerFactory();
-        WebServer webServer = serverFactory.getWebServer(servletContext -> {
-            HelloController helloController = new HelloController();
+        GenericApplicationContext applicationContext = new GenericApplicationContext(); // 스프링 컨테이너 생성
+        applicationContext.registerBean(HelloController.class); // 메타정보를 넣어 Bean을 생성
+        applicationContext.refresh(); // Bean을 만드는 명령어
 
+        // 서블릿 펙토리 : 서블릿 컨테이너를 만드는 것을 쉽게 도와줍니다.
+        ServletWebServerFactory serverFactory = new TomcatServletWebServerFactory();
+        // serverFactory.getWebServer : 서블릿 컨테이너 생성하는 메소드입니다.
+        // 따라서 webServer 가 서블릿 컨테이너 입니다.
+        WebServer webServer = serverFactory.getWebServer(servletContext -> {
             servletContext.addServlet("frontcontroller", new HttpServlet() {
                 @Override
                 protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -35,15 +42,13 @@ public class HellobootApplication {
                         String name = req.getParameter("name");
 
                         // 컨트롤러 클래스를 사용하기
-                        String ret = helloController.hello(name);
+                        HelloController helloController = applicationContext.getBean(HelloController.class);
+                        String ret = helloController.hello(name); // 생략
 
-                        resp.setStatus(HttpStatus.OK.value()); // 상태코드
-                        resp.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE); // 타입
+                        resp.setContentType(MediaType.TEXT_PLAIN_VALUE); // 타입
                         resp.getWriter().print(ret); // 바디
-                    } else if (req.getRequestURI().equals("/user")) {
-                        // 로직처리
-
-                    } else {
+                    }
+                    else {
                         resp.setStatus(HttpStatus.NOT_FOUND.value());
                     }
                 }

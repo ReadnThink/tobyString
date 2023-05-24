@@ -26,6 +26,7 @@ public class HellobootApplication {
     public static void main(String[] args) {
         GenericApplicationContext applicationContext = new GenericApplicationContext(); // 스프링 컨테이너 생성
         applicationContext.registerBean(HelloController.class); // 메타정보를 넣어 Bean을 생성
+        applicationContext.registerBean(SimpleHelloService.class);
         applicationContext.refresh(); // Bean을 만드는 명령어
 
         // 서블릿 펙토리 : 서블릿 컨테이너를 만드는 것을 쉽게 도와줍니다.

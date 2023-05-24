@@ -6,8 +6,15 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Objects;
 
 public class HelloController {
+
+    // final은 처음 생성할때 꼭 필요하므로 생성자가 꼭! 있어야 합니다.
+    private final HelloService helloService;
+
+    public HelloController(HelloService helloService) {
+        this.helloService = helloService;
+    }
+
     public String hello(String name){
-        SimpleHelloService helloService = new SimpleHelloService();
         // 컨트롤러의 중요한 역할인 유저의 요청사항을 검증하기
         return helloService.sayHello(Objects.requireNonNull(name));
     }

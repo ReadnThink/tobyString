@@ -8,11 +8,14 @@ import org.springframework.boot.web.server.WebServer;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.context.support.GenericWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
@@ -23,10 +26,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@Configuration // 구성 정보를 가지고 있는 클래스라는것을 알림
 public class HellobootApplication {
+    // 스프링 컨테이너에게 필요한 의존 오브젝트를 파라미터로 받아옵니다.
+    @Bean
+    public HelloController helloController(HelloService helloService){
+        return new HelloController(helloService);
+    }
+
+    @Bean
+    public HelloService helloService(){
+        return new SimpleHelloService();
+    }
 
     public static void main(String[] args) {
-        GenericWebApplicationContext applicationContext = new GenericWebApplicationContext(){
+        AnnotationConfigWebApplicationContext applicationContext = new AnnotationConfigWebApplicationContext(){
             @Override
             protected void onRefresh() {
                 super.onRefresh();
@@ -42,8 +56,7 @@ public class HellobootApplication {
                 webServer.start();
             }
         }; // 스프링 컨테이너 생성
-        applicationContext.registerBean(HelloController.class); // 메타정보를 넣어 Bean을 생성
-        applicationContext.registerBean(SimpleHelloService.class);
+        applicationContext.register(HellobootApplication.class);
         applicationContext.refresh(); // Bean을 만드는 명령어
     }
 

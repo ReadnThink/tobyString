@@ -1,5 +1,7 @@
 package tobyspring.helloboot;
 
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -7,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Objects;
 
-@RequestMapping
+@RestController
 public class HelloController {
 
     // final은 처음 생성할때 꼭 필요하므로 생성자가 꼭! 있어야 합니다.
@@ -18,7 +20,6 @@ public class HelloController {
     }
 
     @GetMapping("/hello")
-    @ResponseBody
     public String hello(String name){
         // 컨트롤러의 중요한 역할인 유저의 요청사항을 검증하기
         return helloService.sayHello(Objects.requireNonNull(name));

@@ -31,6 +31,16 @@ import java.io.IOException;
 @Configuration // 구성 정보를 가지고 있는 클래스라는것을 알림
 @ComponentScan
 public class HellobootApplication {
+    @Bean
+    public ServletWebServerFactory servletWebServerFactory(){
+        return new TomcatServletWebServerFactory();
+    }
+    @Bean
+    public DispatcherServlet dispatcherServlet(){
+        // DispatcherServlet이 이용할 컨트롤러를 찾아야 하기때문에 ApplicationContext를 생성자로 주어야합니다.
+        // 스프링이 알아서 ApplicationContext를 주입해 줍니다!!
+        return new DispatcherServlet();
+    }
 
     public static void main(String[] args) {
         AnnotationConfigWebApplicationContext applicationContext = new AnnotationConfigWebApplicationContext(){
@@ -38,12 +48,14 @@ public class HellobootApplication {
             protected void onRefresh() {
                 super.onRefresh();
                 // 서블릿 펙토리 : 서블릿 컨테이너를 만드는 것을 쉽게 도와줍니다.
-                ServletWebServerFactory serverFactory = new TomcatServletWebServerFactory();
+                ServletWebServerFactory serverFactory = this.getBean(ServletWebServerFactory.class);
+                DispatcherServlet dispatcherServlet = this.getBean(DispatcherServlet.class);
+
                 // serverFactory.getWebServer : 서블릿 컨테이너 생성하는 메소드입니다.
                 // 따라서 webServer 가 서블릿 컨테이너 입니다.
                 WebServer webServer = serverFactory.getWebServer(servletContext -> {
-                    servletContext.addServlet("dispatcherServlet",
-                            new DispatcherServlet(this) // DispatcherServlet이 작업을 위임할 applicationContext를 등록
+                    servletContext.addServlet("dispatcherServlet",dispatcherServlet
+
                     ).addMapping("/*"); // 모든 요청을 다 받는다.
                 });
                 webServer.start();

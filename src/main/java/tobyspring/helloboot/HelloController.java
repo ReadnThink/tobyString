@@ -22,6 +22,7 @@ public class HelloController {
     @GetMapping("/hello")
     public String hello(String name){
         // 컨트롤러의 중요한 역할인 유저의 요청사항을 검증하기
-        return helloService.sayHello(Objects.requireNonNull(name));
+        if (name == null || name.trim().length() == 0) throw new IllegalArgumentException();
+        return helloService.sayHello(name);
     }
 }

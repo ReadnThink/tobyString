@@ -43,26 +43,6 @@ public class HellobootApplication {
     }
 
     public static void main(String[] args) {
-        AnnotationConfigWebApplicationContext applicationContext = new AnnotationConfigWebApplicationContext(){
-            @Override
-            protected void onRefresh() {
-                super.onRefresh();
-                // 서블릿 펙토리 : 서블릿 컨테이너를 만드는 것을 쉽게 도와줍니다.
-                ServletWebServerFactory serverFactory = this.getBean(ServletWebServerFactory.class);
-                DispatcherServlet dispatcherServlet = this.getBean(DispatcherServlet.class);
-
-                // serverFactory.getWebServer : 서블릿 컨테이너 생성하는 메소드입니다.
-                // 따라서 webServer 가 서블릿 컨테이너 입니다.
-                WebServer webServer = serverFactory.getWebServer(servletContext -> {
-                    servletContext.addServlet("dispatcherServlet",dispatcherServlet
-
-                    ).addMapping("/*"); // 모든 요청을 다 받는다.
-                });
-                webServer.start();
-            }
-        }; // 스프링 컨테이너 생성
-        applicationContext.register(HellobootApplication.class);
-        applicationContext.refresh(); // Bean을 만드는 명령어
+        SpringApplication.run(HellobootApplication.class, args);
     }
-
 }

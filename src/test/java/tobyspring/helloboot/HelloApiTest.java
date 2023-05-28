@@ -11,6 +11,10 @@ import org.springframework.http.ResponseEntity;
 import static org.assertj.core.api.Assertions.*;
 
 public class HelloApiTest {
+
+    /**
+     * 서버가 돌고있어야 Test 통과
+     */
     @Test
     void heallApi() {
         // http localhost:8080/hello?name=Spring

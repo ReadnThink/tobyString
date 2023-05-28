@@ -28,20 +28,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@Configuration // 구성 정보를 가지고 있는 클래스라는것을 알림
-@ComponentScan
+@MySpringBootAnnotation
 public class HellobootApplication {
-    @Bean
-    public ServletWebServerFactory servletWebServerFactory(){
-        return new TomcatServletWebServerFactory();
-    }
-    @Bean
-    public DispatcherServlet dispatcherServlet(){
-        // DispatcherServlet이 이용할 컨트롤러를 찾아야 하기때문에 ApplicationContext를 생성자로 주어야합니다.
-        // 스프링이 알아서 ApplicationContext를 주입해 줍니다!!
-        return new DispatcherServlet();
-    }
-
     public static void main(String[] args) {
         SpringApplication.run(HellobootApplication.class, args);
     }

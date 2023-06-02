@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-@Import(MyAutoConfigurationPropertiesImportSelector.class)
-public @interface EnableMyAutoConfigurationProperties {
+@Import(MyConfigurationPropertiesImportSelector.class)
+public @interface EnableMyConfigurationProperties {
     Class<?> value();
 }

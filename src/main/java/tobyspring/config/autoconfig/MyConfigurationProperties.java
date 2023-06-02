@@ -10,6 +10,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Component
-public @interface MyAutoConfigurationProperties {
+public @interface MyConfigurationProperties {
     String prefix();
 }

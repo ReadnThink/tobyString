@@ -9,10 +9,12 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.type.AnnotatedTypeMetadata;
 import org.springframework.util.ClassUtils;
 import tobyspring.config.ConditionalMyOnClass;
+import tobyspring.config.EnableMyAutoConfiguration;
 import tobyspring.config.MyAutoConfiguration;
 
 @MyAutoConfiguration
 @ConditionalMyOnClass("org.apache.catalina.startup.Tomcat")
+@EnableMyAutoConfigurationProperties(ServerProperties.class)
 public class TomcatWebServerConfig {
 
     @Bean("tomcatWebServerFactory")

@@ -4,9 +4,10 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-@HellobootTest
+@JdbcTest // 임베디드 DB로 dataSouce를 교체해 줍니다 -> 속도가 더 빠르다!
 public class JdbcTemplateTest {
     @Autowired
     JdbcTemplate jdbcTemplate;

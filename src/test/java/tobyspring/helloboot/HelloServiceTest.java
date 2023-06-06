@@ -16,21 +16,25 @@ import java.lang.annotation.Target;
 }
 
 public class HelloServiceTest {
-
-    @UnitTest
-    void simpleHelloService_unit_test() {
-        SimpleHelloService helloService = new SimpleHelloService();
-
-        String ret = helloService.sayHello("Test");
-        Assertions.assertThat(ret).isEqualTo("Hello Test");
-    }
     @Test
     void simpleHelloService() {
-        SimpleHelloService helloService = new SimpleHelloService();
+        SimpleHelloService helloService = new SimpleHelloService(helloRepositoryStub);
 
         String ret = helloService.sayHello("Test");
         Assertions.assertThat(ret).isEqualTo("Hello Test");
     }
+
+    private static HelloRepository helloRepositoryStub = new HelloRepository() {
+            @Override
+            public Hello findHello(String name) {
+                return null;
+            }
+
+            @Override
+            public void increaseCount(String name) {
+
+            }
+        };
 
     @Test
     void helloDecorator() {
